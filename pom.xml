@@ -85,7 +85,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>ua.itea.javaadv.hw009.Game</mainClass>
+              <mainClass>ua.itea.javaadv.hw010.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
