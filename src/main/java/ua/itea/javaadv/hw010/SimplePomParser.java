@@ -53,7 +53,8 @@ public class SimplePomParser extends DefaultHandler {
 
     private Project project;
     private String currentNode;
-    private int level = 0;
+    private int level = 0; //Вообще тут нужен лист вложенности тегов - где находимся в текущий момент, в каких тегах.
+    //Но у нас маленький xml, поэтому так будет ок.
     private boolean build = false;
     private boolean pluginManagement = false;
 
@@ -63,16 +64,6 @@ public class SimplePomParser extends DefaultHandler {
 
     public Project getProject() {
         return project;
-    }
-
-    @Override
-    public void startDocument() throws SAXException {
-        System.out.println("start");
-    }
-
-    @Override
-    public void endDocument() throws SAXException {
-        System.out.println("end");
     }
 
     @Override
@@ -183,9 +174,28 @@ public class SimplePomParser extends DefaultHandler {
                 currentExecution.setGoals(new ArrayList<>());
                 break;
             }
+            case MODEL_VERSION:
+            case GROUP_ID:
+            case ARTIFACT_ID:
+            case VERSION:
+            case NAME:
+            case URL:
+            case PROP_SOURCE_ENCODING:
+            case PROP_COMPILER_SOURCE:
+            case PROP_COMPILER_TARGET:
+            case SCOPE:
+            case DESCRIPTOR_REF:
+            case MAIN_CLASS:
+            case ID:
+            case PHASE:
+            case GOAL:
+            {
+                //no action, this is a string value tag
+                break;
+            }
             default: {
-//                throw new RuntimeException("No action for " + qName + " element!");
-                System.out.println("startElement: " + qName);
+                throw new RuntimeException("No action for " + qName + " element!");
+//                System.out.println("startElement: " + qName);
             }
         }
     }
@@ -284,8 +294,8 @@ public class SimplePomParser extends DefaultHandler {
                     break;
                 }
                 default: {
-//                    throw new RuntimeException("No action for " + currentNode + " node! Value is: \"" + value + "\"");
-                    System.out.println("characters value: " + value);
+                    throw new RuntimeException("No action for " + currentNode + " node! Value is: \"" + value + "\"");
+//                    System.out.println("characters value: " + value);
                 }
             }
         }
@@ -303,6 +313,6 @@ public class SimplePomParser extends DefaultHandler {
         } else if (PLUGINS.equals(qName)) {
             currentPlugin = null;
         }
-        System.out.println("endElement: " + qName);
+//        System.out.println("endElement: " + qName);
     }
 }
